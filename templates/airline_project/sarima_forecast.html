@@ -1,0 +1,267 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Loyalty Points Forecast{% endblock title %}
+
+{% block extrastyle %}
+<style>
+  .page-wrap { max-width: 1100px; margin: 10px auto; }
+  .cardx {
+    background: #27293d;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.20);
+  }
+  .title{
+    color:#fff;
+    font-size:1.7rem;
+    font-weight:800;
+    margin:0 0 6px 0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .muted{ color:#9a9a9a; margin:0; }
+
+  .form-row{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-top:16px;
+  }
+  .form-row label{ color:#fff; font-weight:700; margin:0; }
+  .form-row select{
+    background:#1e1e2f;
+    color:#fff;
+    border:1px solid rgba(150,214,134,0.35);
+    border-radius:10px;
+    padding:10px 12px;
+    min-width:220px;
+    outline:none;
+  }
+  .btnx{
+    background:#59A472;
+    color:#fff;
+    border:0;
+    border-radius:10px;
+    padding:10px 18px;
+    font-weight:800;
+    transition:.2s;
+  }
+  .btnx:hover{ background:#96D686; transform:translateY(-1px); }
+
+  .kpis{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:14px;
+    margin-top:10px;
+  }
+  .kpi{
+    background:rgba(0,0,0,0.22);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px;
+    padding:16px;
+  }
+  .kpi .label{ color:#9a9a9a; font-weight:800; font-size:.9rem; }
+  .kpi .value{ color:#fff; font-weight:900; font-size:1.45rem; margin-top:6px; }
+  .kpi .hint{ color:#9a9a9a; font-size:.85rem; margin-top:6px; }
+
+  .insight{
+    background:rgba(150,214,134,0.10);
+    border:1px solid rgba(150,214,134,0.25);
+    border-radius:14px;
+    padding:14px 16px;
+    color:#dff7da;
+    margin-top:14px;
+    line-height:1.5;
+  }
+
+  .nice-table{ width:100%; border-collapse:collapse; margin-top:10px; }
+  .nice-table th{
+    color:#9a9a9a;
+    font-weight:900;
+    text-transform:uppercase;
+    font-size:.78rem;
+    padding:12px 10px;
+    border-bottom:1px solid rgba(255,255,255,0.10);
+    text-align:left;
+  }
+  .nice-table td{
+    color:#fff;
+    padding:14px 10px;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    vertical-align:middle;
+  }
+
+  .pill{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    background:rgba(89,164,114,0.18);
+    border:1px solid rgba(89,164,114,0.30);
+    color:#dff7da;
+    font-weight:900;
+    font-size:.88rem;
+    white-space:nowrap;
+  }
+
+  .pred-big{
+    font-weight:900;
+    font-size:1rem;
+  }
+  .range{ color:#cfcfcf; font-weight:700; }
+  .small-note{ color:#9a9a9a; font-size:.9rem; margin-top:6px; }
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+
+        <div class="page-wrap">
+
+          <!-- Header + Input -->
+          <div class="cardx">
+            <h1 class="title">
+              <i class="tim-icons icon-time-alarm"></i>
+              Loyalty Points Forecast
+            </h1>
+            <p class="muted">
+              Select how far ahead to forecast loyalty points utilization. Results are shown as an expected value + a likely range.
+            </p>
+
+            <form method="post" class="form-row">
+              {% csrf_token %}
+
+              <label for="horizon">Forecast period</label>
+              <select name="horizon" id="horizon" required>
+                <option value="1" {% if horizon == 1 %}selected{% endif %}>Next month</option>
+                <option value="3" {% if horizon == 3 %}selected{% endif %}>Next 3 months</option>
+                <option value="6" {% if horizon == 6 %}selected{% endif %}>Next 6 months</option>
+                <option value="12" {% if horizon == 12 %}selected{% endif %}>Next 12 months</option>
+              </select>
+
+              <button type="submit" class="btnx">
+                <i class="tim-icons icon-chart-bar-32"></i> Get forecast
+              </button>
+            </form>
+
+            <p class="small-note">
+              Tip: For a more realistic “next month”, make sure the deployed model was fitted on the latest available data.
+            </p>
+          </div>
+
+          {% if forecast %}
+
+          <!-- Summary KPIs -->
+          <div class="cardx">
+            <h2 class="title" style="font-size:1.25rem;">
+              <i class="tim-icons icon-chart-line-36"></i>
+              Summary for the next {{ horizon }} month{{ horizon|pluralize }}
+            </h2>
+            <p class="muted">Highlights to support planning and seasonality awareness.</p>
+
+            <div class="kpis">
+              <div class="kpi">
+                <div class="label">Expected average per month</div>
+                <div class="value" id="avgValue">—</div>
+                <div class="hint">Typical utilization level</div>
+              </div>
+
+              <div class="kpi">
+                <div class="label">Highest expected month</div>
+                <div class="value" id="peakValue">—</div>
+                <div class="hint" id="peakPeriod">—</div>
+              </div>
+
+              <div class="kpi">
+                <div class="label">Likely total over period</div>
+                <div class="value" id="totalValue">—</div>
+                <div class="hint">Sum of forecasted months</div>
+              </div>
+            </div>
+
+            <!-- Dynamic insight coming from the VIEW -->
+            <div class="insight">
+              <strong>Planning insight:</strong>
+              {{ planning_insight }}
+            </div>
+          </div>
+
+          <!-- Friendly Table -->
+          <div class="cardx">
+            <h2 class="title" style="font-size:1.25rem;">
+              <i class="tim-icons icon-bullet-list-67"></i>
+              Month-by-month outlook
+            </h2>
+            <p class="muted">Expected points used and the likely range (best/worst case).</p>
+
+            <table class="nice-table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Expected points used</th>
+                  <th>Likely range</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in forecast %}
+                <tr>
+                  <td><span class="pill">{{ row.period }}</span></td>
+                  <td class="pred-big yhat">{{ row.yhat|floatformat:2 }}</td>
+                  <td class="range">Between {{ row.lower|floatformat:2 }} and {{ row.upper|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- KPI calculation from rendered table (no backend changes needed) -->
+          <script>
+            (function () {
+              const rows = Array.from(document.querySelectorAll('table.nice-table tbody tr'));
+              const values = rows.map(r => {
+                const period = r.querySelector('.pill')?.textContent?.trim() || '';
+                const y = parseFloat(r.querySelector('td.yhat')?.textContent);
+                return { period, y: isNaN(y) ? 0 : y };
+              });
+
+              const total = values.reduce((s, v) => s + v.y, 0);
+              const avg = values.length ? total / values.length : 0;
+
+              let peak = { period: '—', y: -Infinity };
+              values.forEach(v => { if (v.y > peak.y) peak = v; });
+
+              const fmt = (n) => Math.round(n).toLocaleString();
+
+              const totalEl = document.getElementById('totalValue');
+              const avgEl = document.getElementById('avgValue');
+              const peakValEl = document.getElementById('peakValue');
+              const peakPeriodEl = document.getElementById('peakPeriod');
+
+              if (totalEl) totalEl.textContent = fmt(total);
+              if (avgEl) avgEl.textContent = fmt(avg);
+              if (peakValEl) peakValEl.textContent = fmt(peak.y);
+              if (peakPeriodEl) peakPeriodEl.textContent = 'Month: ' + peak.period;
+            })();
+          </script>
+
+          {% endif %}
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+
+
+

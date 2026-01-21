@@ -1,0 +1,332 @@
+// ============================================
+// Custom Component Styles - GREEN Power BI Theme
+// ============================================
+
+// Main Background
+body {
+    background-color: $powerbi-bg-main !important;
+}
+
+.main-panel {
+    background: $powerbi-bg-main !important;
+}
+
+.content {
+    background-color: $powerbi-bg-main !important;
+}
+
+// Cards
+.card {
+    background: $powerbi-bg-card !important;
+    border: 1px solid $powerbi-green-primary !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(89, 164, 114, 0.1) !important;
+    
+    .card-header {
+        background-color: transparent !important;
+        border-bottom: 1px solid rgba(89, 164, 114, 0.3) !important;
+        padding: 15px 20px !important;
+        
+        .card-title {
+            color: $powerbi-text-primary !important;
+            font-weight: 500 !important;
+        }
+        
+        .card-category {
+            color: $powerbi-text-secondary !important;
+        }
+    }
+    
+    .card-body {
+        background-color: $powerbi-bg-card !important;
+    }
+}
+
+// Sidebar with GREEN theme
+.sidebar {
+    background: linear-gradient(0deg, $powerbi-bg-darker 0%, $powerbi-bg-card 100%) !important;
+    
+    .sidebar-wrapper {
+        background: transparent !important;
+    }
+    
+    // Logo area
+    .logo {
+        border-bottom: 1px solid rgba(89, 164, 114, 0.3) !important;
+        
+        a {
+            color: $powerbi-text-primary !important;
+        }
+    }
+    
+    // Menu items
+    .nav li > a {
+        color: $powerbi-text-primary !important;
+        
+        i {
+            color: $powerbi-green-light !important;
+        }
+    }
+    
+    // Active menu item - GREEN background
+    .nav li.active > a,
+    .nav li.active > a:hover,
+    .nav li.active > a:focus {
+        background: $powerbi-green-primary !important;
+        box-shadow: 0 4px 20px 0 rgba(89, 164, 114, 0.4) !important;
+        color: #ffffff !important;
+        
+        i {
+            color: #ffffff !important;
+        }
+    }
+    
+    // Hover state
+    .nav li:hover:not(.active) > a {
+        background: rgba(89, 164, 114, 0.15) !important;
+        color: $powerbi-green-light !important;
+        
+        i {
+            color: $powerbi-green-light !important;
+        }
+    }
+}
+
+// Nav divider
+.nav-divider {
+    height: 1px;
+    background: rgba(89, 164, 114, 0.3);
+    margin: 10px 0;
+}
+
+// Navbar
+.navbar {
+    background: $powerbi-bg-card !important;
+    border-bottom: 1px solid rgba(89, 164, 114, 0.2) !important;
+    
+    .navbar-wrapper {
+        background: transparent !important;
+    }
+}
+
+// Buttons
+.btn-primary {
+    background: $powerbi-green-primary !important;
+    background-image: linear-gradient(to bottom left, $powerbi-green-primary, $powerbi-green-light) !important;
+    border-color: $powerbi-green-primary !important;
+    color: #ffffff !important;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        background: $powerbi-green-light !important;
+        border-color: $powerbi-green-light !important;
+        box-shadow: 0 4px 20px 0 rgba(150, 214, 134, 0.4) !important;
+    }
+}
+
+.btn-info {
+    background: $powerbi-blue-bright !important;
+    border-color: $powerbi-blue-bright !important;
+}
+
+// Forms
+.form-control {
+    background-color: rgba(51, 51, 51, 0.3) !important;
+    border: 1px solid $powerbi-green-primary !important;
+    color: $powerbi-text-primary !important;
+    
+    &:focus {
+        background-color: rgba(51, 51, 51, 0.5) !important;
+        border-color: $powerbi-green-light !important;
+        box-shadow: 0 0 0 0.2rem rgba(150, 214, 134, 0.25) !important;
+        color: $powerbi-text-primary !important;
+    }
+    
+    &::placeholder {
+        color: $powerbi-text-secondary !important;
+    }
+}
+
+.form-group label {
+    color: $powerbi-text-primary !important;
+}
+
+// Input Group
+.input-group-focus {
+    border-color: $powerbi-green-light !important;
+}
+
+// Alerts
+.alert-success {
+    background-color: rgba(89, 164, 114, 0.2) !important;
+    border-color: $powerbi-green-primary !important;
+    color: $powerbi-green-light !important;
+}
+
+// Tables
+.table {
+    color: $powerbi-text-primary !important;
+    
+    thead th {
+        border-bottom: 2px solid $powerbi-green-primary !important;
+        color: $powerbi-text-primary !important;
+    }
+    
+    td {
+        border-top: 1px solid rgba(89, 164, 114, 0.2) !important;
+    }
+}
+
+// Power BI iframe container
+.powerbi-container {
+    background-color: transparent !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+
+    iframe {
+        border: none !important;
+        border-radius: 8px !important;
+    }
+}
+
+// Footer
+.footer {
+    background: transparent !important;
+    border-top: 1px solid rgba(89, 164, 114, 0.2) !important;
+    
+    .copyright {
+        color: $powerbi-text-secondary !important;
+    }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: $powerbi-bg-darker;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $powerbi-green-primary;
+    border-radius: 4px;
+
+    &:hover {
+        background: $powerbi-green-light;
+    }
+}
+
+// Dropdown menus
+.dropdown-menu {
+    background-color: $powerbi-bg-card !important;
+    border: 1px solid $powerbi-green-primary !important;
+}
+
+.dropdown-item {
+    color: $powerbi-text-primary !important;
+    
+    &:hover {
+        background-color: rgba(89, 164, 114, 0.15) !important;
+        color: $powerbi-green-light !important;
+    }
+}
+
+// View Toggle Buttons
+.view-toggle-buttons {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 25px;
+
+    .view-btn {
+        background: transparent !important;
+        border: 1px solid $powerbi-blue-dark !important;
+        color: $powerbi-blue-dark !important;
+        min-width: 160px;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.25s ease;
+
+        i {
+            color: #4c9dff !important;
+            margin-right: 6px;
+        }
+
+        &:hover {
+            background: rgba(15, 61, 110, 0.08) !important;
+            border-color: #4c9dff !important;
+            color: #4c9dff !important;
+        }
+
+        &.active {
+            i {
+                color: $powerbi-green-light !important;
+            }
+        }
+    }
+}
+
+// Button Group Styling
+.btn-group .btn {
+    margin: 0 5px;
+    border-radius: 20px !important;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+// Override ALL purple/pink elements with GREEN
+.bg-primary,
+.bg-default {
+    background-color: $powerbi-green-primary !important;
+}
+
+.text-primary,
+.text-default {
+    color: $powerbi-green-primary !important;
+}
+
+.border-primary,
+.border-default {
+    border-color: $powerbi-green-primary !important;
+}
+
+// Buttons - override all default purple buttons
+.btn-default {
+    background: $powerbi-green-primary !important;
+    background-image: linear-gradient(to bottom left, $powerbi-green-primary, $powerbi-green-light) !important;
+    border-color: $powerbi-green-primary !important;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        background: $powerbi-green-light !important;
+        border-color: $powerbi-green-light !important;
+    }
+}
+
+// Links
+a:not(.dropdown-item):not(.nav-link) {
+    color: $powerbi-green-primary !important;
+    
+    &:hover {
+        color: $powerbi-green-light !important;
+    }
+}
+
+// Progress bars
+.progress-bar {
+    background-color: $powerbi-green-primary !important;
+}
+
+// Badges
+.badge-primary,
+.badge-default {
+    background-color: $powerbi-green-primary !important;
+}
+
+// Pagination
+.pagination .page-item.active .page-link {
+    background-color: $powerbi-green-primary !important;
+    border-color: $powerbi-green-primary !important;
+}

@@ -1,0 +1,158 @@
+// ============================================
+// ML Dashboard Styles
+// ============================================
+
+// IMPORTANT: import variables FIRST
+@import "powerbi-variables";
+
+// Optional if you want base overrides available
+@import "custom";
+
+// ----------------------------
+// View switching
+// ----------------------------
+.view-section {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+// ----------------------------
+// ML Models Layout
+// ----------------------------
+.ml-models-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.ml-header {
+  text-align: center;
+  margin-bottom: 60px;
+
+  h1 {
+    color: $powerbi-green-light;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: $powerbi-text-secondary;
+    font-size: 1.2rem;
+  }
+}
+
+// ----------------------------
+// Cards Grid
+// ----------------------------
+.ml-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+// ----------------------------
+// Individual Card
+// ----------------------------
+.ml-card {
+  background: $powerbi-bg-card;
+  border: 2px solid $powerbi-green-primary;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(89, 164, 114, 0.3);
+    border-color: $powerbi-green-light;
+  }
+}
+
+.ml-card-icon {
+  font-size: 4rem;
+  color: $powerbi-green-light;
+  margin-bottom: 20px;
+}
+
+.ml-card-title {
+  color: $powerbi-green-light;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.ml-card-subtitle {
+  color: $powerbi-text-secondary;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ml-card-description {
+  color: $powerbi-text-primary;
+  font-size: 1rem;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+// ----------------------------
+// Features List
+// ----------------------------
+.ml-card-features {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  text-align: left;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    color: $powerbi-text-primary;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &::before {
+      content: "✓ ";
+      color: $powerbi-green-light;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+  }
+}
+
+// ----------------------------
+// Action Button
+// ----------------------------
+.ml-card-btn {
+  background: $powerbi-green-primary !important;
+  border: none !important;
+  color: #ffffff !important;
+  padding: 12px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $powerbi-green-light !important;
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(150, 214, 134, 0.4);
+  }
+}

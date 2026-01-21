@@ -1,0 +1,53 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %} Dashboard {% endblock title %}
+
+{% block extrastyle %}
+<style>
+    /* Hero image styles for dashboard */
+    .dashboard-hero {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        border-radius: 6px;
+    }
+    .dashboard-hero img {
+        display: block;
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        -o-object-fit: cover;
+    }
+    .dashboard-hero .hero-overlay {
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+        background: linear-gradient(rgba(6,10,20,0.45), rgba(6,10,20,0.15));
+        pointer-events: none;
+    }
+    @media (max-width: 768px) {
+        .dashboard-hero img { height: 240px; }
+    }
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+
+        <div class="chart-area dashboard-hero">
+                <!-- Decorative hero image with overlay. Keep the canvas (hidden)
+                         so existing demo JS that queries `chartBig1` won't error. -->
+                <img src="{% static 'img/plane-dashboard.jpg' %}" alt="Dashboard image"/>
+                <div class="hero-overlay" aria-hidden="true"></div>
+                <canvas id="chartBig1" style="display:none;"></canvas>
+        </div>
+
+{% endblock content %}
+{% block extrajs %}
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+</script>
+{% endblock extrajs %}

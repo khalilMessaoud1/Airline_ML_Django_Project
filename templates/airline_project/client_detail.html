@@ -1,0 +1,410 @@
+{% extends 'layouts/base.html' %}
+{% comment %} 
+{% load static %}
+
+{% block title %}{{ client.get_full_name }} - Client Details{% endblock title %}
+
+{% block content %}
+
+
+
+<div class="content">
+    <!-- Client Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-body">
+                    <div class="author">
+                        <a href="#">
+                            <img class="avatar border-gray" src="{% static 'assets/img/default-avatar.png' %}" alt="...">
+                            <h5 class="title">{{ client.get_full_name }}</h5>
+                        </a>
+                        <p class="description">
+                            {{ client.email }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ML Predictions Results -->
+    <p>{{user_role}}</p>
+    {% if predictions and predictions.predictions_completed %}
+    <div class="row">
+        <!-- Overall Summary -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="info-icon text-center icon-{{ predictions.potential_category|lower }}">
+                                <i class="tim-icons icon-trophy"></i>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="numbers">
+                                <p class="card-category">Potential</p>
+                                <h3 class="card-title">{{ predictions.potential_category }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Level -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="info-icon text-center icon-{{ predictions.risk_level|lower }}">
+                                <i class="tim-icons icon-alert-circle-exc"></i>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="numbers">
+                                <p class="card-category">Risk Level</p>
+                                <h3 class="card-title">{{ predictions.risk_level }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLV -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="info-icon text-center icon-success">
+                                <i class="tim-icons icon-coins"></i>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="numbers">
+                                <p class="card-category">CLV</p>
+                                <h3 class="card-title">${{ predictions.clv_prediction|floatformat:0 }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segmentation -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="info-icon text-center icon-primary">
+                                <i class="tim-icons icon-chart-pie-36"></i>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="numbers">
+                                <p class="card-category">Segment</p>
+                                <h3 class="card-title">{{ predictions.segmentation_label }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Predictions -->
+    
+    <div class="row">
+        <!-- HABIBA - Segmentation & CLV -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Customer Segmentation & CLV</h4>
+                    <p class="card-category">By HABIBA</p>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Segmentation Cluster:</strong></td>
+                            <td>{{ predictions.segmentation_label }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CLV Prediction:</strong></td>
+                            <td>${{ predictions.clv_prediction|floatformat:2 }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADHEM - Churn Predictions -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Churn Risk Analysis</h4>
+                    <p class="card-category">By ADHEM</p>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Churn Risk:</strong></td>
+                            <td><span class="badge badge-{{ predictions.churn_risk_label|lower }}">{{ predictions.churn_risk_label }}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Months Until Churn:</strong></td>
+                            <td>{{ predictions.churn_months|floatformat:1 }} months</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASMA - Enrollment Insights -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Enrollment Insights</h4>
+                    <p class="card-category">By ASMA</p>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Engagement Level:</strong></td>
+                            <td>{{ predictions.engagement_label }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Equity Segment:</strong></td>
+                            <td>{{ predictions.equity_segment_label }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- WAJD - Loyalty Points -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Loyalty Points Analysis</h4>
+                    <p class="card-category">By WAJD</p>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Loyalty Classification:</strong></td>
+                            <td>
+                                {% if predictions.loyalty_points_classification_label == 0 %}
+                                    Non redeemers
+                                {% else %}
+                                    Redeemer
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Loyalty Cluster:</strong></td>
+                            <td>{{ predictions.loyalty_cluster_label }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- KHALIL - TRAVEL BEHAVIOR -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Travel Behavior Analysis</h4>
+                    <p class="card-category">By KHALIL</p>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Preferred Season:</strong></td>
+                            <td>
+                               {{ predictions.khalil_preferred_season }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Travel Behavior Cluster:</strong></td>
+                            <td>{{ predictions.khalil_cluster_name }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- MOLKA - Loyalty Program -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Loyalty Program</h4>
+                    <p class="card-category">By MOLKA</p>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Current Tier:</strong></td>
+                            <td>{{ client.tier }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tier Progression:</strong></td>
+                            <td>{{ predictions.tier_progression_label }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Top Accelerators:</strong></td>
+                            <td>{{ predictions.tier_upgrade_prediction|default:"N/A" }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h4><i class="tim-icons icon-time-alarm"></i> ML Predictions in Progress...</h4>
+                        <p>The ML models are currently running predictions for this client. This may take a few moments. Please refresh the page.</p>
+                        <button class="btn btn-warning" onclick="location.reload()">
+                            <i class="tim-icons icon-refresh-02"></i> Refresh Page
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Client Information -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Client Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Personal Details</h5>
+                            <table class="table table-sm">
+                                <tr><td><strong>Name:</strong></td><td>{{ client.get_full_name }}</td></tr>
+                                <tr><td><strong>Email:</strong></td><td>{{ client.email }}</td></tr>
+                                <tr><td><strong>Gender:</strong></td><td>{{ client.get_gender_display }}</td></tr>
+                                <tr><td><strong>Education:</strong></td><td>{{ client.education }}</td></tr>
+                                <tr><td><strong>Marital Status:</strong></td><td>{{ client.get_marital_status_display }}</td></tr>
+                                <tr><td><strong>Salary:</strong></td><td>${{ client.salary|floatformat:2 }}</td></tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Flight & Loyalty Data</h5>
+                            <table class="table table-sm">
+                                <tr><td><strong>Total Flights:</strong></td><td>{{ client.total_flights }}</td></tr>
+                                <tr><td><strong>Distance:</strong></td><td>{{ client.distance|floatformat:0 }} km</td></tr>
+                                <tr><td><strong>Points Accumulated:</strong></td><td>{{ client.points_accumulated|floatformat:0 }}</td></tr>
+                                <tr><td><strong>Points Redeemed:</strong></td><td>{{ client.points_redeemed|floatformat:0 }}</td></tr>
+                                <tr><td><strong>Loyalty Tier:</strong></td><td>{{ client.tier }}</td></tr>
+                                <tr><td><strong>Satisfaction:</strong></td><td>{{ client.satisfaction }}/5</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} {% endcomment %}
+
+{% comment %} {% extends 'layouts/base.html' %} {% endcomment %}
+{% load static %}
+
+{% block title %}{{ client.get_full_name }} - Client Details{% endblock title %}
+
+{% block content %}
+
+<div class="content">
+
+  <!-- Client Header -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-user">
+        <div class="card-body">
+          <div class="author">
+            <a href="#">
+              <img class="avatar border-gray" src="{% static 'assets/img/default-avatar.png' %}" alt="Avatar">
+              <h5 class="title">{{ client.get_full_name }}</h5>
+            </a>
+            <p class="description">{{ client.email }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# Role-based visibility: open WITH, include once, close WITH before elif #}
+
+  {% if user_role == "admin" %}
+    {% with show_habiba=1 show_adhem=1 show_asma=1 show_wajd=1 show_khalil=1 show_molka=1 %}
+      {% include "airline_project/_client_predictions.html" %}
+    {% endwith %}
+
+  {% elif user_role == "marketing_lead" %}
+    {% with show_habiba=1 show_adhem=1 show_asma=0 show_wajd=1 show_khalil=1 show_molka=1 %}
+      {% include "airline_project/_client_predictions.html" %}
+    {% endwith %}
+
+  {% elif user_role == "finance_lead" %}
+    {% with show_habiba=1 show_adhem=1 show_asma=0 show_wajd=1 show_khalil=0 show_molka=0 %}
+      {% include "airline_project/_client_predictions.html" %}
+    {% endwith %}
+
+  {% else %}
+    {% with show_habiba=0 show_adhem=0 show_asma=0 show_wajd=0 show_khalil=0 show_molka=0 %}
+      {% include "airline_project/_client_predictions.html" %}
+    {% endwith %}
+  {% endif %}
+
+  <!-- Client Information -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Client Information</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Personal Details</h5>
+              <table class="table table-sm">
+                <tr><td><strong>Name:</strong></td><td>{{ client.get_full_name }}</td></tr>
+                <tr><td><strong>Email:</strong></td><td>{{ client.email }}</td></tr>
+                <tr><td><strong>Gender:</strong></td><td>{{ client.get_gender_display }}</td></tr>
+                <tr><td><strong>Education:</strong></td><td>{{ client.education }}</td></tr>
+                <tr><td><strong>Marital Status:</strong></td><td>{{ client.get_marital_status_display }}</td></tr>
+                <tr><td><strong>Salary:</strong></td><td>${{ client.salary|floatformat:2 }}</td></tr>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <h5>Flight &amp; Loyalty Data</h5>
+              <table class="table table-sm">
+                <tr><td><strong>Total Flights:</strong></td><td>{{ client.total_flights }}</td></tr>
+                <tr><td><strong>Distance:</strong></td><td>{{ client.distance|floatformat:0 }} km</td></tr>
+                <tr><td><strong>Points Accumulated:</strong></td><td>{{ client.points_accumulated|floatformat:0 }}</td></tr>
+                <tr><td><strong>Points Redeemed:</strong></td><td>{{ client.points_redeemed|floatformat:0 }}</td></tr>
+                <tr><td><strong>Loyalty Tier:</strong></td><td>{{ client.tier }}</td></tr>
+                <tr><td><strong>Satisfaction:</strong></td><td>{{ client.satisfaction }}/5</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}

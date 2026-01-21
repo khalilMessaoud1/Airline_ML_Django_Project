@@ -1,0 +1,306 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+
+{% block extrastyle %}
+<style>
+    /* Ensures hidden sections don't take up space */
+    .view-section {
+        display: none;
+    }
+    .view-section.active {
+        display: block;
+    }
+    
+    /* ML Model Cards Styling */
+    .ml-models-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    
+    .ml-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    
+    .ml-header h1 {
+        color: #96D686; /* was $powerbi-green-light */
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .ml-header .subtitle {
+        color: #9a9a9a; /* was $powerbi-text-secondary */
+        font-size: 1.2rem;
+    }
+    
+    .ml-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+    
+    .ml-card {
+        background: #27293d; /* was $powerbi-bg-card */
+        border: 2px solid #59A472; /* was $powerbi-green-primary */
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .ml-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(89, 164, 114, 0.3);
+        border-color: #96D686; /* was $powerbi-green-light */
+    }
+    
+    .ml-card-icon {
+        font-size: 4rem;
+        color: #96D686; /* was $powerbi-green-light */
+        margin-bottom: 20px;
+    }
+    
+    .ml-card-title {
+        color: #96D686; /* was $powerbi-green-light */
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+    
+    .ml-card-subtitle {
+        color: #9a9a9a; /* was $powerbi-text-secondary */
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .ml-card-description {
+        color: #ffffff; /* was $powerbi-text-primary */
+        font-size: 1rem;
+        margin-bottom: 25px;
+        line-height: 1.6;
+    }
+    
+    .ml-card-features {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 25px;
+        text-align: left;
+    }
+    
+    .ml-card-features ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .ml-card-features li {
+        color: #ffffff; /* was $powerbi-text-primary */
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .ml-card-features li:last-child {
+        border-bottom: none;
+    }
+    
+    .ml-card-features li:before {
+        content: "✓ ";
+        color: #96D686; /* was $powerbi-green-light */
+        font-weight: bold;
+        margin-right: 8px;
+    }
+    
+    .ml-card-btn {
+        background: transparent !important;
+        border: 2px solid #96D686 !important; /* green outline */
+        color: #96D686 !important;
+        padding: 12px 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .ml-card-btn:hover {
+        background: rgba(150, 214, 134, 0.1) !important; /* subtle green overlay */
+        color: #96D686 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(150, 214, 134, 0.35);
+    }
+    
+
+/* Force override Bootstrap btn-primary / btn-success */
+.view-toggle-buttons .view-btn.btn {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 2px solid #96D686 !important;
+  border-color: #96D686 !important;
+  color: #96D686 !important;
+
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Icon spacing */
+.view-toggle-buttons .view-btn.btn i {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+/* Hover */
+.view-toggle-buttons .view-btn.btn:hover {
+  background-color: rgba(150, 214, 134, 0.12) !important;
+  border-color: #96D686 !important;
+  color: #96D686 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(150, 214, 134, 0.35);
+}
+
+/* Active state */
+.view-toggle-buttons .view-btn.btn.active,
+.view-toggle-buttons .view-btn.btn:active {
+  background-color: rgba(150, 214, 134, 0.18) !important;
+  border-color: #96D686 !important;
+  color: #96D686 !important;
+  box-shadow: 0 0 0 2px rgba(150, 214, 134, 0.55);
+}
+
+/* Focus */
+.view-toggle-buttons .view-btn.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(150, 214, 134, 0.35) !important;
+}
+
+
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="content">
+    <!-- View Toggle Buttons (2 buttons only) -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="view-toggle-buttons">
+                <button class="btn btn-primary btn-lg view-btn active" data-view="dashboard">
+                    <i class="tim-icons icon-chart-pie-36"></i> Dashboard View
+                </button>
+                <button class="btn btn-success btn-lg view-btn" data-view="models">
+                    <i class="tim-icons icon-atom"></i> Prediction Models
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard View (Power BI) -->
+    <div class="view-section active" id="dashboard-view">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            <i class="tim-icons icon-chart-pie-36"></i> {{ page_title }}
+                        </h4>
+                        <p class="card-category">Interactive Power BI Dashboard</p>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="powerbi-container" style="height: 750px;">
+                            <iframe
+                                title="{{ page_title }}"
+                                width="100%"
+                                height="100%"
+                                src="{{ powerbi_url }}"
+                                frameborder="0"
+                                allowFullScreen="true"
+                                allowTransparency="true"
+                                style="border: none;">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prediction Models View -->
+    <div class="view-section" id="models-view">
+        <div class="ml-models-container">
+            <!-- Header -->
+            <div class="ml-header">
+                <h1><i class="tim-icons icon-atom"></i> {{ page_title }} - ML PREDICTOR</h1>
+                <p class="subtitle">Choose your prediction model</p>
+            </div>
+
+            
+            <!-- ML Model Cards -->
+            <div class="ml-cards">
+
+                {% for model in models %}
+                <div class="ml-card">
+
+                    <div class="ml-card-icon">
+                        <i class="{{ model.icon }}"></i>
+                    </div>
+
+                    <h3 class="ml-card-title">{{ model.title }}</h3>
+                    <p class="ml-card-subtitle">{{ model.subtitle }}</p>
+                    <p class="ml-card-description">{{ model.description }}</p>
+
+                    <div class="ml-card-features">
+                        <ul>
+                            {% for feature in model.features %}
+                            <li>{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <a href="{% url model.url_name %}" class="btn ml-card-btn">
+                        START NOW
+                    </a>
+
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extrajs %}
+<script>
+    $(document).ready(function() {
+        // Function to switch views
+        function switchView(viewName) {
+            // Update button states
+            $('.view-btn').removeClass('active');
+            $('.view-btn[data-view="' + viewName + '"]').addClass('active');
+            
+            // Show selected view
+            $('.view-section').removeClass('active');
+            $('#' + viewName + '-view').addClass('active');
+        }
+
+        // Click event for buttons
+        $('.view-btn').click(function() {
+            var viewName = $(this).data('view');
+            switchView(viewName);
+        });
+    });
+</script>
+{% endblock extrajs %}

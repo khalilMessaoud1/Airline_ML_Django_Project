@@ -1,0 +1,184 @@
+{% load i18n static admin_black %}
+<ul class="nav">
+  <!-- Main Dashboard -->
+  {% comment %} <li class="{% if 'dashboard' in segment %} active {% endif %}">
+    <a href="/">
+      <i class="tim-icons icon-chart-pie-36"></i>
+      <p>Dashboard</p>
+    </a>
+  </li> {% endcomment %}
+
+  <!-- Nav Divider -->
+
+  <!-- Client Management -->
+  {% if user_role == "admin" %}
+  <li class="{% if active_page == 'create-client' %} active {% endif %}">
+    <a href="{% url 'create-client' %}">
+      <i class="tim-icons icon-simple-add"></i>
+      <p>Create Client</p>
+    </a>
+  </li>
+  {% endif %}
+
+  <li class="{% if active_page == 'clients-list' %} active {% endif %}">
+    <a href="{% url 'clients-list' %}">
+      <i class="tim-icons icon-bullet-list-67"></i>
+      <p>View All Clients</p>
+    </a>
+  </li>
+  <li class="nav-divider"></li>
+  <!-- Airline Project - 6 Objectives -->
+  {% comment %} <li class="{% if active_page == 'loyalty-points' %} active {% endif %}">
+    <a href="{% url 'loyalty-points' %}">
+      <i class="tim-icons icon-chart-pie-36"></i>
+      <p>Loyalty Points Utilization</p>
+    </a>
+  </li>
+  
+  <li class="{% if active_page == 'churn-reduction' %} active {% endif %}">
+    <a href="{% url 'churn-reduction' %}">
+      <i class="tim-icons icon-chart-bar-32"></i>
+      <p>Churn Reduction</p>
+    </a>
+  </li>
+  
+  <li class="{% if active_page == 'travel-behavior' %} active {% endif %}">
+    <a href="{% url 'travel-behavior' %}">
+      <i class="tim-icons icon-pin"></i>
+      <p>Travel Behavior Analysis</p>
+    </a>
+  </li>
+  
+  <li class="{% if active_page == 'customer-lifetime' %} active {% endif %}">
+    <a href="{% url 'customer-lifetime' %}">
+      <i class="tim-icons icon-coins"></i>
+      <p>Customer Lifetime Value</p>
+    </a>
+  </li>
+  
+  <li class="{% if active_page == 'loyalty-program' %} active {% endif %}">
+    <a href="{% url 'loyalty-program' %}">
+      <i class="tim-icons icon-trophy"></i>
+      <p>Loyalty Program</p>
+    </a>
+  </li>
+  
+  <li class="{% if active_page == 'enrollment-insights' %} active {% endif %}">
+    <a href="{% url 'enrollment-insights' %}">
+      <i class="tim-icons icon-single-02"></i>
+      <p>Enrollment Insights</p>
+    </a>
+  </li> {% endcomment %}
+  {% for item in allowed_menu %}
+  <li class="{% if active_page == item.active %} active {% endif %}">
+    <a href="{% url item.url_name %}">
+      <i class="{{ item.icon }}"></i>
+      <p>{{ item.label }}</p>
+    </a>
+  </li>
+  {% endfor %}
+  <!-- Nav Divider -->
+  <li class="nav-divider"></li>
+
+  {% comment %} <!-- Tools & Utilities -->
+  <li class="{% if 'dynamic_dt' in segment %} active {% endif %}">
+    <a href="{% url "dynamic_dt" %}">
+      <i class="tim-icons icon-puzzle-10"></i>
+      <p>Dynamic Tables</p>
+    </a>
+  </li>   
+  
+  <li class="{% if 'dynamic_api' in segment %} active {% endif %}">
+    <a href="{% url "dynamic_api" %}">
+      <i class="tim-icons icon-send"></i>
+      <p>Dynamic API</p>
+    </a>
+  </li>    
+  
+  <li class="{% if 'charts' in segment %} active {% endif %}">
+    <a href="{% url "charts" %}">
+      <i class="tim-icons icon-chart-bar-32"></i>
+      <p>Charts</p>
+    </a>
+  </li> {% endcomment %}
+
+  <!-- Nav Divider -->
+  {% comment %} <li class="nav-divider"></li> {% endcomment %}
+
+  <!-- Authentication (Always Visible) -->
+  {% if request.user.is_authenticated %}
+  <li>
+    <a href="{% url 'logout' %}">
+      <i class="tim-icons icon-button-power"></i>
+      <p>Logout</p>
+    </a>
+  </li>
+  {% else %}
+  <li>
+    <a href="{% url 'auth_signin' %}">
+      <i class="tim-icons icon-key-25"></i>
+      <p>Login</p>
+    </a>
+  </li>
+  {% comment %} <li>
+    <a href="{% url 'auth_signup' %}">
+      <i class="tim-icons icon-badge"></i>
+      <p>Register</p>
+    </a>
+  </li> {% endcomment %}
+  {% endif %}
+
+  <!-- Nav Divider -->
+  <li class="nav-divider"></li>
+
+  <!-- UI Components & Pages -->
+  {% comment %} <li class="{% if 'icons' in segment %} active {% endif %}">
+    <a href="{% url 'icons' %}">
+      <i class="tim-icons icon-atom"></i>
+      <p>Icons</p>
+    </a>
+  </li>
+  
+  <li class="{% if 'map' in segment %} active {% endif %}">
+    <a href="{% url 'map' %}">
+      <i class="tim-icons icon-pin"></i>
+      <p>Maps</p>
+    </a>
+  </li>
+  
+  <li class="{% if 'notifications' in segment %} active {% endif %}">
+    <a href="{% url 'notifications' %}">
+      <i class="tim-icons icon-bell-55"></i>
+      <p>Notifications</p>
+    </a>
+  </li> {% endcomment %}
+  
+  {% comment %} <li class="{% if 'user_profile' in segment %} active {% endif %}">
+    <a href="{% url 'user_profile' %}">
+      <i class="tim-icons icon-single-02"></i>
+      <p>User Profile</p>
+    </a> {% endcomment %}
+  </li>
+  
+  {% comment %} <li class="{% if 'tables' in segment %} active {% endif %}">
+    <a href="{% url 'tables' %}">
+      <i class="tim-icons icon-puzzle-10"></i>
+      <p>Table List</p>
+    </a>
+  </li>
+  
+  <li class="{% if 'typography' in segment %} active {% endif %}">
+    <a href="{% url 'typography' %}">
+      <i class="tim-icons icon-align-center"></i>
+      <p>Typography</p>
+    </a>
+  </li>
+  
+  <li class="{% if 'rtl' in segment %} active {% endif %}">
+    <a href="{% url 'rtl' %}">
+      <i class="tim-icons icon-world"></i>
+      <p>RTL Support</p>
+    </a>
+  </li> {% endcomment %}
+
+</ul>

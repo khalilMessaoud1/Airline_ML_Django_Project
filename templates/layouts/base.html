@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load i18n static admin_black %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% get_direction as direction %}
+{% get_admin_setting as admin_setting %}
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock title %} | Django Black Dashboard </title>
+    <link rel="canonical" href="https://app-generator.dev/product/black-dashboard/" />
+
+    {% include 'includes/head.html' %}
+    {% block extrahead %}{% endblock extrahead %}
+    {% block extrastyle %}{% endblock extrastyle %}
+    <!-- Chat Widget CSS -->
+    <style>
+    .btn-fab {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+        transition: all .15s ease;
+    }
+    .btn-fab.btn-round {
+        border-radius: 50%;
+    }
+    .fixed-top-right {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1031;
+    }
+    </style>
+</head>
+
+<body class="{% block bodyclass %}{% endblock bodyclass %}">
+    <div class="wrapper">
+        {% block sidebar %}
+        {% include 'includes/sidebar.html' %}
+        {% endblock sidebar %}
+        <div class="main-panel">
+            {% block navigation %}
+            {% include 'includes/navigation.html' %}
+            {% endblock navigation %}
+            {% block content %}{% endblock content %}
+            {% block footer %}
+            {% include 'includes/footer.html' %}
+            {% endblock footer %}
+        </div>
+    </div>
+    <!-- Chat Icon - Always visible -->
+    {% if request.user.is_authenticated %}
+    {% include 'chat/chat_icon.html' %}
+    {% endif %}
+    
+    <!-- Chat Widget - Initially hidden -->
+    {% if request.user.is_authenticated %}
+    <div id="chat-widget-root"></div>
+    {% endif %}
+    
+    {% block fixed-plugin %}
+    {% include 'includes/fixed-plugin.html' %}
+    {% endblock fixed-plugin %}
+    {% include 'includes/scripts.html' %}
+    
+    <!-- Chat Widget JavaScript -->
+    {% if request.user.is_authenticated %}
+    <script src="{% static 'chat/chat.js' %}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load chat widget via AJAX to avoid template conflicts
+        fetch('/airline/chat/widget/')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('chat-widget-root').innerHTML = html;
+                // Initialize chat AFTER the widget HTML is loaded
+                setTimeout(() => {
+                    if (document.getElementById('chat-toggle-btn') && document.getElementById('chat-widget')) {
+                        window.airlineAIChat = new AirlineAIChat();
+                    } else {
+                        console.warn('Chat elements not found after loading widget');
+                    }
+                }, 100);
+            })
+            .catch(error => {
+                console.error('Error loading chat widget:', error);
+                // Create minimal fallback chat button
+                document.getElementById('chat-widget-root').innerHTML = `
+                    <div class="fixed-bottom-right p-3">
+                        <button class="btn btn-primary btn-fab btn-round" id="fallback-chat-btn"
+                                style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
+                            <i class="tim-icons icon-bulb-63"></i>
+                        </button>
+                    </div>
+                `;
+                document.getElementById('fallback-chat-btn').addEventListener('click', function() {
+                    alert('AI Assistant is currently unavailable. Please try again later or contact support.');
+                });
+            });
+    });
+    </script>
+    {% endif %}
+    
+    {% block extrajs %}{% endblock extrajs %}
+</body>
+
+</html>

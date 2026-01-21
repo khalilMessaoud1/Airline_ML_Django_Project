@@ -1,0 +1,97 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+
+{% block content %}
+<div class="content">
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-body">
+                    <div class="author">
+                        <a href="#">
+                            <img class="avatar border-gray" src="{% static 'assets/img/default-avatar.png' %}" alt="...">
+                            <h5 class="title">{{ page_title }}</h5>
+                        </a>
+                        <p class="description">
+                            Complete list of all registered clients
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clients Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">All Clients</h4>
+                    <p class="card-category">Manage and view all client information</p>
+                </div>
+                <div class="card-body">
+                    {% if clients %}
+                    <div class="table-responsive">
+                        <table class="table tablesorter">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Province</th>
+                                    <th>Tier</th>
+                                    <th>Enrollment Date</th>
+                                    <th>Total Flights</th>
+                                    <th>Points Accumulated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for client in clients %}
+                                <tr>
+                                    <td>{{ client.get_full_name }}</td>
+                                    <td>{{ client.email }}</td>
+                                    <td>{{ client.province }}</td>
+                                    <td>
+                                        <span class="badge badge-{% if client.tier == 'Star' %}warning{% elif client.tier == 'Nova' %}info{% else %}success{% endif %}">
+                                            {{ client.tier }}
+                                        </span>
+                                    </td>
+                                    <td>{{ client.enrollment_date|date:"M d, Y" }}</td>
+                                    <td>{{ client.total_flights }}</td>
+                                    <td>{{ client.points_accumulated|floatformat:0 }}</td>
+                                    <td>
+                                        <a href="{% url 'client-detail' client.id %}" class="btn btn-sm btn-primary">
+                                            <i class="tim-icons icon-zoom-split"></i> View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <div class="row">
+                            <div class="col-md-6 mx-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">No clients found</h4>
+                                        <p class="card-description">Start by creating your first client to see the ML predictions in action.</p>
+                                        <a href="{% url 'create-client' %}" class="btn btn-primary btn-lg">
+                                            <i class="tim-icons icon-simple-add"></i> Create First Client
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

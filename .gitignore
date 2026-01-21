@@ -1,0 +1,26 @@
+*.pyc
+*.DS_Store
+*.egg*
+/dist/
+/static/dist/
+/.idea
+/docs/_build/
+/node_modules/
+build/
+env
+/staticfiles/
+
+#src
+#*.sqlite*
+
+#.env
+node_modules
+yarn.lock
+# ML trained models
+*.pkl
+*.joblib
+*.h5
+
+# Large data / models folders
+ml_models/
+models/

@@ -1,0 +1,167 @@
+<div id="chat-widget" class="card chat-widget" style="display: none; position: fixed; bottom: 90px; right: 30px; width: 380px; z-index: 9998; box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
+    <div class="card-header" style="background: linear-gradient(135deg, #0d1a3a 0%, #1a2a5a 100%); color: white; border-radius: 10px 10px 0 0;">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="tim-icons icon-bulb-63 mr-2" style="font-size: 1.2rem;"></i>
+                <h4 class="card-title mb-0" style="font-weight: 600;">AI Assistant</h4>
+            </div>
+            <button id="chat-close-btn" class="btn btn-sm btn-icon" style="color: white;">
+                <i class="tim-icons icon-simple-remove"></i>
+            </button>
+        </div>
+        <p class="card-category mb-0" style="font-size: 0.85rem; opacity: 0.8;">
+            Ask About Client Insights And Predictions
+        </p>
+    </div>
+    
+    <div class="card-body p-0" style="max-height: 450px; background-color: #121a2e;">
+        <!-- Client selection at the top -->
+        <div class="px-3 py-2 border-bottom" style="border-color: rgba(255,255,255,0.1);">
+            <select id="client-select" class="form-control form-control-sm" style="font-size: 0.85rem; background-color: #1a2540; color: white; border: 1px solid #304570;">
+                <option value="">-- Select a client to analyze --</option>
+                {% for client in clients %}
+                <option value="{{ client.id }}" style="background-color: #1a2540; color: white;">{{ client.get_full_name }} ({{ client.tier }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Chat messages container -->
+        <div id="chat-messages" class="px-3 py-3" style="height: 300px; overflow-y: auto; background-color: #121a2e;">
+            <div class="d-flex mb-3">
+                <div class="avatar" style="width: 36px; height: 36px; border-radius: 50%; background: #00c853; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+                    AI
+                </div>
+                <div class="ml-3" style="background: #1a2540; border-radius: 18px 18px 18px 5px; padding: 12px 15px; max-width: 85%; color: #e0e0e0;">
+                    <p class="mb-1" style="font-size: 0.9rem; line-height: 1.5;">Hello! I'm your AI Assistant for Flair Airlines analytics. I can help you analyze client data and provide insights based on our machine learning predictions. Select a client from the dropdown above to get started!</p>
+                    <small class="text-muted" style="font-size: 0.75rem; opacity: 0.7;">Today, {{ request.user.get_full_name }} 👋</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Typing indicator -->
+        <div id="typing-indicator" class="px-3 py-2" style="display: none; background-color: #121a2e;">
+            <div class="d-flex mb-2">
+                <div class="avatar" style="width: 36px; height: 36px; border-radius: 50%; background: #00c853; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+                    AI
+                </div>
+                <div class="ml-3" style="background: #1a2540; border-radius: 18px 18px 18px 5px; padding: 12px 15px; max-width: 85%; color: #e0e0e0;">
+                    <div class="d-flex">
+                        <span class="typing-dot" style="display: inline-block; width: 8px; height: 8px; background-color: #00c853; border-radius: 50%; margin-right: 4px; animation: typing 1.4s infinite both;"></span>
+                        <span class="typing-dot" style="display: inline-block; width: 8px; height: 8px; background-color: #00c853; border-radius: 50%; margin-right: 4px; animation: typing 1.4s infinite both; animation-delay: 0.2s;"></span>
+                        <span class="typing-dot" style="display: inline-block; width: 8px; height: 8px; background-color: #00c853; border-radius: 50%; animation: typing 1.4s infinite both; animation-delay: 0.4s;"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-footer p-2 border-top" style="border-color: rgba(255,255,255,0.1); background-color: #121a2e;">
+        <div class="input-group" style="border: 1px solid #304570; border-radius: 10px; background-color: #1a2540;">
+            <textarea id="chat-input" class="form-control" placeholder="Ask me about client insights..." rows="3" style="resize: none; font-size: 0.9rem; background-color: #1a2540; color: #e0e0e0; border: none; box-shadow: none;"></textarea>
+            <div class="input-group-append">
+                <button id="send-message-btn" class="btn btn-primary" style="height: 82px; background: #00c853; border: none; border-radius: 0 10px 10px 0;">
+                    <i class="tim-icons icon-send" style="font-size: 1.2rem;"></i>
+                </button>
+            </div>
+        </div>
+        <small class="form-text text-muted mt-1" style="font-size: 0.75rem; color: #a0a0a0; opacity: 0.8;">
+            Examples: "What's the churn risk for this client?", "Analyze loyalty points usage", "Show CLV predictions"
+        </small>
+    </div>
+</div>
+
+<style>
+@keyframes typing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+}
+
+.avatar {
+    flex-shrink: 0;
+}
+
+.message-content {
+    max-width: 85%;
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.ai-message .message-content {
+    background-color: #1a2540;
+    border: 1px solid #304570;
+    border-radius: 18px 18px 18px 5px;
+    color: #e0e0e0;
+}
+
+.user-message .message-content {
+    background-color: #3f51b5;
+    color: white;
+    border-radius: 18px 18px 5px 18px;
+    margin-left: auto;
+}
+
+.typing-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #00c853;
+    border-radius: 50%;
+    animation: typing 1.4s infinite both;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.chat-widget {
+    border-radius: 10px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    border: none;
+    background-color: #121a2e;
+}
+
+/* Input field focus state */
+#chat-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.3);
+}
+
+/* Button hover effects */
+#send-message-btn:hover {
+    background: #00a545;
+}
+
+#chat-close-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+}
+
+/* Custom scrollbar for chat messages */
+#chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: #151e35;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: #304570;
+    border-radius: 4px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #405580;
+}
+</style>

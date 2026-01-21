@@ -1,0 +1,79 @@
+// ============================================
+// Power BI Custom Theme Variables - GREEN Theme
+// ============================================
+// Import this file BEFORE other variables to override defaults
+
+// Brand Colors (Green Theme from powerbi-theme.css)
+$powerbi-dark: #333333;
+$powerbi-green-light: #96D686;
+$powerbi-blue-dark: #0F3D6E;
+$powerbi-green-primary: #59A472;
+$powerbi-blue-bright: #1F84FF;
+
+// Background Colors
+$powerbi-bg-main: #1a1d2e;
+$powerbi-bg-card: #27293d;
+$powerbi-bg-darker: #1e1e2f;
+
+// Text Colors
+$powerbi-text-primary: #ffffff;
+$powerbi-text-secondary: #9a9a9a;
+
+// ============================================
+// Bootstrap & Black Dashboard Variable Overrides
+// ============================================
+
+// Body & Main Background
+$body-bg: $powerbi-bg-main !default;
+$main-panel-bg: $powerbi-bg-main !default;
+
+// Cards
+$card-bg: $powerbi-bg-card !default;
+$card-border-color: $powerbi-green-primary !default;
+$card-box-shadow: 0 4px 20px rgba(89, 164, 114, 0.1) !default;
+
+// Sidebar - Green gradient
+$sidebar-background: linear-gradient(0deg, $powerbi-bg-darker 0%, $powerbi-bg-card 100%) !default;
+$sidebar-color: $powerbi-text-primary !default;
+
+// Active menu item - GREEN
+$sidebar-active-bg: $powerbi-green-primary !default;
+$sidebar-active-color: #ffffff !default;
+
+// Hover menu item
+$sidebar-hover-bg: rgba(89, 164, 114, 0.15) !default;
+$sidebar-hover-color: $powerbi-green-light !default;
+
+// Menu icons
+$sidebar-icon-color: $powerbi-green-light !default;
+$sidebar-active-icon-color: #ffffff !default;
+
+// Navbar
+$navbar-bg: $powerbi-bg-card !default;
+$navbar-border-color: rgba(89, 164, 114, 0.2) !default;
+
+// Primary button (GREEN)
+$primary: $powerbi-green-primary !default;
+$btn-primary-bg: $powerbi-green-primary !default;
+
+// Info button (BLUE)
+$info: $powerbi-blue-bright !default;
+
+// Form Inputs
+$input-bg: rgba(51, 51, 51, 0.3) !default;
+$input-border-color: $powerbi-green-primary !default;
+$input-color: $powerbi-text-primary !default;
+$input-placeholder-color: $powerbi-text-secondary !default;
+$input-focus-border-color: $powerbi-green-light !default;
+
+// Text colors
+$headings-color: $powerbi-text-primary !default;
+$body-color: $powerbi-text-primary !default;
+
+// Tables
+$table-color: $powerbi-text-primary !default;
+$table-border-color: rgba(89, 164, 114, 0.2) !default;
+
+// Links
+$link-color: $powerbi-green-primary !default;
+$link-hover-color: $powerbi-green-light !default;
